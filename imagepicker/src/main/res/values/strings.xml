@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ImageAttacher</string>
+    <string name="delete">delete</string>
+    <string name="rotate">rotate</string>
+    <string name="crop">crop</string>
+    <string name="cancel">cancel</string>
+    <string name="send">Send</string>
+    <string name="processing">Processing…</string>
+    <string name="cannot_open_image">Can\'t open selected image</string>
+</resources>
