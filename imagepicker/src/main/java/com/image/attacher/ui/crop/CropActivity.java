@@ -92,5 +92,10 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
+        super.onBackPressed();
+    }
 }
