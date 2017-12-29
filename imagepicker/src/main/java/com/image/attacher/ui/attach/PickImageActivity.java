@@ -1,6 +1,7 @@
 package com.image.attacher.ui.attach;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -12,12 +13,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.image.attacher.R;
 import com.image.attacher.dialog.CustomProgressDialog;
 import com.image.attacher.model.Constants;
@@ -25,7 +29,6 @@ import com.image.attacher.model.PickImageModel;
 import com.image.attacher.ui.attach.mvp.AttachContract;
 import com.image.attacher.ui.attach.mvp.AttachPresenterImpl;
 import com.image.attacher.utils.LruCacheSingleTon;
-import com.image.attacher.utils.TouchImageView;
 
 /**
  * Created by jinu.j on 26-12-2017.
@@ -33,12 +36,12 @@ import com.image.attacher.utils.TouchImageView;
 
 public class PickImageActivity extends AppCompatActivity implements
         AttachContract.View, View.OnClickListener {
-
+    public static String TAG = "PickImageActivity";
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 14;
 
     private AttachContract.Presenter mPresenter;
-    private TouchImageView mCropImageView;
+    private AppCompatImageView mCropImageView;
     private CustomProgressDialog mDialog;
     private FloatingActionButton mSendBtn;
 
@@ -57,19 +60,7 @@ public class PickImageActivity extends AppCompatActivity implements
     }
 
 
-    private void initModel() {
-        if (getIntent().getExtras() != null) {
-            pickImageModel = getIntent().getExtras().getParcelable(Constants.APP_DATA);
-            mPresenter = new AttachPresenterImpl(this, pickImageModel);
-        }
-    }
 
-    private void initController() {
-        mSendBtn.setImageResource(pickImageModel.buttonIcon);
-        mSendBtn.setOnClickListener(this);
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-    }
 
     private void initView() {
         mCropImageView = findViewById(R.id.cropImageView);
@@ -90,6 +81,25 @@ public class PickImageActivity extends AppCompatActivity implements
         }
     }
 
+
+
+    private void initModel() {
+        if (getIntent().getExtras() != null) {
+            pickImageModel = getIntent().getExtras().getParcelable(Constants.APP_DATA);
+            mPresenter = new AttachPresenterImpl(this, pickImageModel);
+            LruCacheSingleTon.getInstance();
+        }
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initController() {
+        mSendBtn.setImageResource(pickImageModel.buttonIcon);
+        mSendBtn.setOnClickListener(this);
+        mCropImageView.setOnTouchListener(new ImageMatrixTouchHandler(this));
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+    }
 
     @Override
     public boolean requestPermission() {
@@ -165,8 +175,8 @@ public class PickImageActivity extends AppCompatActivity implements
 
     @Override
     public void showImage(final String path) {
-
-        mCropImageView.post(new Runnable() {
+        Log.d(TAG, "showImage() called with: path = [" + path + "]");
+        mCropImageView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -175,7 +185,7 @@ public class PickImageActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
             }
-        });
+        }, 100);
 
 
     }

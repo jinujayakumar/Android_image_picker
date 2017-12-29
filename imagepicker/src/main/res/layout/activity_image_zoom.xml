@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.image.attacher.ui.zoom.ImageZoomActivity">
 
-    <com.image.attacher.utils.TouchImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_zoom"
         android:transitionName="robot"
         android:layout_width="match_parent"

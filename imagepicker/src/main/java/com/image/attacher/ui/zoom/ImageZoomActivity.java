@@ -1,27 +1,29 @@
 package com.image.attacher.ui.zoom;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.image.attacher.R;
 import com.image.attacher.model.Constants;
-import com.image.attacher.utils.TouchImageView;
 
 import java.io.File;
 
 public class ImageZoomActivity extends AppCompatActivity {
 
 
-    private TouchImageView mTouchImageView;
     private static final String TAG = "ImageZoomActivity";
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,8 @@ public class ImageZoomActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(title);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mTouchImageView = findViewById(R.id.image_zoom);
+        AppCompatImageView mTouchImageView = findViewById(R.id.image_zoom);
+        mTouchImageView.setOnTouchListener(new ImageMatrixTouchHandler(this));
         Glide.with(ImageZoomActivity.this)
                 .load(isFile ? new File(fileLocation) : fileLocation)
                 .placeholder(R.drawable.placeholder)
