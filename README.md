@@ -1,5 +1,5 @@
 # Android image picker
-Simplifies the operation to pick image from Gallery/Camera
+Simplifies the operation to pick image from Gallery/Camera abc
 
 Usage: download this project and 
 import module imagepicker to your project and add dependency in your app
